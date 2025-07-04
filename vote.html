@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vote for Our Startup Name</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- AOS Animation -->
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet" />
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 text-gray-800">
+
+  <header class="text-center py-10 bg-white shadow" data-aos="fade-down">
+    <h1 class="text-4xl font-bold text-indigo-700" data-aos="zoom-in" data-aos-delay="100">
+      🗳️ Vote for Our Startup Name
+    </h1>
+    <p class="text-gray-600 mt-2" data-aos="fade-up" data-aos-delay="200">
+      Help us choose a unique identity for our all-in-one service platform.
+    </p>
+  </header>
+
+  <main class="max-w-xl mx-auto p-6">
+    <form id="voteForm" class="space-y-6 mt-8 bg-white p-6 rounded-xl shadow" data-aos="fade-up" data-aos-delay="300">
+      
+      <!-- Voter Info -->
+      <div>
+        <label class="block text-sm font-semibold mb-1">Your Name</label>
+        <input type="text" name="voterName" class="w-full border rounded-lg p-2" required />
+      </div>
+
+      <div>
+        <label class="block text-sm font-semibold mb-1">You are a:</label>
+        <select name="voterType" class="w-full border rounded-lg p-2" required>
+          <option value="">Select role</option>
+          <option value="Frontend">Frontend</option>
+          <option value="Backend">Backend</option>
+          <option value="Designer">Designer</option>
+        </select>
+      </div>
+
+      <!-- Voting Options -->
+      <div>
+        <p class="text-sm font-semibold mb-2">Choose a name:</p>
+        <div class="grid gap-3">
+          <label class="flex items-center space-x-3">
+            <input type="radio" name="startupName" value="Alluvio" required />
+            <span>Alluvio</span>
+          </label>
+          <label class="flex items-center space-x-3">
+            <input type="radio" name="startupName" value="Fluxara" />
+            <span>Fluxara</span>
+          </label>
+          <label class="flex items-center space-x-3">
+            <input type="radio" name="startupName" value="Univora" />
+            <span>Univora</span>
+          </label>
+          <label class="flex items-center space-x-3">
+            <input type="radio" name="startupName" value="Vibreo" />
+            <span>Vibreo</span>
+          </label>
+          <label class="flex items-center space-x-3">
+            <input type="radio" name="startupName" value="Orbisio" />
+            <span>Orbisio</span>
+          </label>
+          <label class="flex items-center space-x-3">
+            <input type="radio" name="startupName" value="Qorely" />
+            <span>Qorely</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Submit -->
+      <div class="pt-4">
+        <button type="submit" class="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition">
+          Submit Vote
+        </button>
+      </div>
+    </form>
+
+    <!-- Confirmation -->
+    <p id="confirmation" class="text-center text-green-600 mt-6 hidden" data-aos="fade-in">
+      ✅ Thank you for your vote!
+    </p>
+  </main>
+
+  <!-- Footer -->
+  <footer class="text-center py-6 text-sm text-gray-500 mt-10">
+    &copy; 2025 DevTeam — Saikat Roy
+  </footer>
+
+  <!-- AOS Init -->
+  <script>
+    AOS.init();
+
+    document.getElementById('voteForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const formData = new FormData(this);
+      const name = formData.get('voterName');
+      const role = formData.get('voterType');
+      const vote = formData.get('startupName');
+
+      if (!name || !role || !vote) {
+        alert("Please complete all fields.");
+        return;
+      }
+
+      const confirmVote = confirm(`Are you sure you want to vote for "${vote}" as a ${role}?`);
+      if (!confirmVote) return;
+
+      fetch("https://script.google.com/macros/s/AKfycbx9mQvWSvZ7jdsrj0_h5les7Swhw0ELwLBhG6pQ9UCpZ_OwjE2iDibMNI8DRdRFhauP/exec", {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: name, role: role, vote: vote })
+      });
+
+      document.getElementById('confirmation').classList.remove('hidden');
+      this.reset();
+    });
+  </script>
+
+</body>
+</html>
