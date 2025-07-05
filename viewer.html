@@ -25,8 +25,8 @@
           <tr>
             <th class="px-4 py-3 text-left font-semibold text-indigo-700">Timestamp</th>
             <th class="px-4 py-3 text-left font-semibold text-indigo-700">Name</th>
-            <th class="px-4 py-3 text-left font-semibold text-indigo-700">Role</th>
-            <th class="px-4 py-3 text-left font-semibold text-indigo-700">Voted Name</th>
+            <th class="px-4 py-3 text-left font-semibold text-indigo-700">Voter Type</th>
+            <th class="px-4 py-3 text-left font-semibold text-indigo-700">Selected Name</th>
           </tr>
         </thead>
         <tbody>
@@ -65,9 +65,9 @@
           const tr = document.createElement('tr');
           tr.innerHTML = `
             <td class="px-4 py-2">${new Date(row.Timestamp).toLocaleString()}</td>
-            <td class="px-4 py-2">${row.name || row.Name || "—"}</td>
-            <td class="px-4 py-2">${row.role || row.Role || "—"}</td>
-            <td class="px-4 py-2 font-semibold text-indigo-600">${row.vote || row["Voted Name"] || "—"}</td>
+            <td class="px-4 py-2">${row.Name || "—"}</td>
+            <td class="px-4 py-2">${row["Voter type"] || "—"}</td>
+            <td class="px-4 py-2 font-semibold text-indigo-600">${row["Selected Name"] || "—"}</td>
           `;
           tbody.appendChild(tr);
         });
@@ -94,11 +94,22 @@
 
     document.getElementById('shareWhatsappBtn').addEventListener('click', async () => {
       const statusMsg = document.getElementById('statusMessage');
+      const shareButton = document.getElementById('shareWhatsappBtn');
+
       statusMsg.textContent = "Generating image... Please wait.";
 
+      // Hide the button and status message before capture
+      statusMsg.style.display = 'none';
+      shareButton.style.display = 'none';
+
       try {
-        const container = document.getElementById('resultContainer');
+        const container = document.body; // capture entire page
+
         const canvas = await html2canvas(container, { scale: 2 });
+
+        // Restore the hidden elements after capture
+        statusMsg.style.display = '';
+        shareButton.style.display = '';
 
         statusMsg.textContent = "Uploading image to ImgBB...";
 
@@ -114,6 +125,10 @@
         statusMsg.textContent = "WhatsApp opened. You can send the message now.";
 
       } catch (error) {
+        // Restore display even on error
+        statusMsg.style.display = '';
+        shareButton.style.display = '';
+
         statusMsg.textContent = "Error: " + error.message;
         console.error(error);
       }
